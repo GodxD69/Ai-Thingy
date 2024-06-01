@@ -1,66 +1,77 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import { Link } from "@nextui-org/link";
 import clsx from "clsx";
-
 import { Providers } from "./providers";
-
-import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
+
+import NavBar from "@/components/navbar";
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  icons: {
-    icon: "/favicon.ico",
-  },
+	title: "Ai-Thingy",
+	description: "A simple chat bot powered by google's generative AI",
+	generator: "Next.js",
+	applicationName: "Ai-Thingy",
+	authors: [{ name: "zephex", url: "https://github.com/real-zephex" }],
+	creator: "zephex",
+	keywords: [
+		"chatbot",
+		"google generative ai",
+	],
+	robots: {
+		index: true,
+		follow: true,
+		nocache: false,
+		googleBot: {
+			index: true,
+			follow: true,
+			noimageindex: false,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+		},
+	},
+	verification: {
+		google: "google",
+		yandex: "yandex",
+		yahoo: "yahoo",
+		other: {
+			me: ["zephex@duck.com"],
+		},
+	},
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
+	themeColor: [
+		{ media: "(prefers-color-scheme: light)", color: "white" },
+		{ media: "(prefers-color-scheme: dark)", color: "black" },
+	],
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <html suppressHydrationWarning lang="en">
-      <head />
-      <body
-        className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
-      >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-              {children}
-            </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              <Link
-                isExternal
-                className="flex items-center gap-1 text-current"
-                href="https://nextui-docs-v2.vercel.app?utm_source=next-app-template"
-                title="nextui.org homepage"
-              >
-                <span className="text-default-600">Powered by</span>
-                <p className="text-primary">NextUI</p>
-              </Link>
-            </footer>
-          </div>
-        </Providers>
-      </body>
-    </html>
-  );
+	return (
+		<html suppressHydrationWarning lang="en">
+			<head />
+			<body
+				className={clsx(
+					"min-h-screen bg-background font-sans antialiased",
+					fontSans.variable,
+				)}
+			>
+				<Providers
+					themeProps={{ attribute: "class", defaultTheme: "dark" }}
+				>
+					<div className="relative flex flex-col h-dvh">
+						<NavBar />
+						<main className="container mx-auto max-w-7xl pt-2 ">
+							{children}
+						</main>
+					</div>
+				</Providers>
+			</body>
+		</html>
+	);
 }
