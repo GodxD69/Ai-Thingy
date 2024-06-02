@@ -25,17 +25,18 @@ To get started with Ai-Thingy, follow these steps:
 2. The AI configuration file has not been included to prevent misuse of my API key, go to [Google AI studio](https://aistudio.google.com/) and create your own bot.
 3. Copy the code provided there and create new file under `/components` folder named `aiConfig.ts` and paste the previously copied code there. Make sure to edit the `ai` function in the file to following
 ```ts
-export async function runAi(message: string) {
-	const chatSession = model.startChat({
+export async function runAi(message: string, history: any[] = []) {
+
+	const chatSessionConfig = {
 		generationConfig,
 		safetySettings,
-		history: [],
-	});
+		history: history.length > 0 ? [...history] : undefined, // Conditionally spread history
+	};
 
+	const chatSession = model.startChat(chatSessionConfig);
 	const result = await chatSession.sendMessage(message);
 	return result.response.text();
 }
-
 ```
 4. **Install Dependencies**: Run `npm install` to install all required dependencies.
 5. **Start the Development Server**: Run `npm run dev` to start the Next.js development server.
