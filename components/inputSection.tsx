@@ -2,30 +2,38 @@
 
 import { Avatar, Skeleton, Textarea } from "@nextui-org/react";
 import { IoSendSharp } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 import { runAi } from "@/components/aiConfig";
-import ReactMarkdown from "react-markdown";
+import {
+	SaveContextToLocal,
+	LoadContextFromLocal,
+} from "@/config/ContextConfig";
 
 const InputSection = () => {
 	const [userMessage, setUserMessage] = useState<string>("");
 	const [newMessages, setNewMessages] = useState<JSX.Element[]>([]);
 	const [loading, setLoading] = useState(<></>);
+	const [disabled, setDisabled] = useState(false);
 	const [title, setTitle] = useState(
 		<p className="w-full h-screen flex items-center justify-center mt-[-4rem] text-xl">
 			Welcome to{" "}
 			<span className="text-sky-400 font-bold ml-1"> Ai-Thingy</span>
 		</p>,
 	);
-	const [disabled, setDisabled] = useState(false);
-
+	const context = LoadContextFromLocal() ? LoadContextFromLocal() : "";
 	// android detection fuck apple
-	const isAndroid = /Android/i.test(navigator.userAgent);
+	let isAndroid: boolean;
+	useEffect(() => {
+		isAndroid = /Android/i.test(navigator.userAgent);
+	});
 
 	async function aiExecute() {
 		if (userMessage.trim() === "") {
 			return;
 		}
+		SaveContextToLocal(userMessage, "user");
 		setDisabled(true);
 		setTitle(<></>);
 		const userKey = `user-${Date.now()}`;
@@ -49,7 +57,7 @@ const InputSection = () => {
 				</div>
 			</div>,
 		);
-		const data = await runAi(userMessage);
+		const data = await runAi(userMessage, context.history);
 		const ai_format = (
 			<div className="w-full mt-2 mb-2" key={aiKey}>
 				<div className="flex flex-col ml-1">
