@@ -1,5 +1,3 @@
-"use server";
-
 import InputSection from "@/components/inputSection";
 
 const HomePage = async () => {
